@@ -10,6 +10,7 @@ const text = ref("");
 
 const handleAddItem = () => {
     list.push({
+        id: new Date().getTime(),
         text: text.value,
         done: false,
         edit: false,

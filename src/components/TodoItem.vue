@@ -1,24 +1,26 @@
 <script setup>
 
-const { list, item, itemId } = defineProps({
+const { list, item, order } = defineProps({
     list: Array,
     item: Object,
-    itemId: Number,
+    order: Number,
 });
 
 const handleDeleteItem = (id) => {
-    list.splice(id, 1)
+    const itemIdx = list.findIndex((i) => i.id === id);
+    list.splice(itemIdx, 1)
 }
 
 const handleDoneItem = (id) => {
-    const targetItem = list[id]
+    const targetItem = list.find((i) => i.id === id)
     if (!targetItem) return
     targetItem.done = !targetItem.done
 
 }
 
 const handleEditItem = (id) => {
-    const targetItem = list[id]
+    const targetItem = list.find((i) => i.id === id)
+    console.log("targetItem", targetItem)
     if (!targetItem) return
     targetItem.edit = !targetItem.edit
 }
@@ -26,11 +28,11 @@ const handleEditItem = (id) => {
 </script>
 
 <template>
-    <div class="todo_item" @click="handleDoneItem(itemId)">
-        <p :class="{ todo_item_done: item.done }">#{{ itemId + 1 }} {{ item.text }}</p>
+    <div class="todo_item" @click="handleDoneItem(item.id)">
+        <p :class="{ todo_item_done: item.done }">#{{ item.id }} {{ item.text }}</p>
         <div class="todo_button_group">
-            <button :hidden="item.done" @click.stop="handleEditItem(itemId)">EDIT</button>
-            <button :hidden="!item.done" @click.stop="handleDeleteItem(itemId)">DELETE</button>
+            <button :hidden="item.done" @click.stop="handleEditItem(item.id)">EDIT</button>
+            <button :hidden="!item.done" @click.stop="handleDeleteItem(item.id)">DELETE</button>
         </div>
     </div>
 </template>

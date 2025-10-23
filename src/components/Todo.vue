@@ -8,16 +8,44 @@ defineProps({
   msg: String,
 })
 const search = ref("")
-const list = reactive([{
-  text: "buy some pencils",
-  done: false,
-  edit: false,
-}]);
+const list = reactive([
+  {
+    id: 12829839,
+    text: "buy some pencils",
+    done: false,
+    edit: false,
+  },
+  {
+    id: 12383048,
+    text: "go to the cinema",
+    done: false,
+    edit: false,
+  },
+  {
+    id: 12902383,
+    text: "help my brother with homework",
+    done: false,
+    edit: false,
+  },
+  {
+    id: 12189233,
+    text: "clean my room",
+    done: false,
+    edit: false,
+  }
+]);
+const type = ref("ALL")
+const currentList = computed(() => {
+  if (type.value === "ALL") return list
+  if (type.value === "NEW") return list.filter((todo) => !todo.done)
+  if (type.value === "DONE") return list.filter((todo) => todo.done)
+  return list
+})
 
 const filteredList = computed(() => {
-  const query = search.value?.trim().toLowerCase()
-  if (!query) return list
-  return list.filter((item) => item.text.toLowerCase().includes(query))
+  const query = search.value?.trim().toLowerCase();
+  if (!query) return currentList.value;
+  return currentList.value.filter((item) => item.text.toLowerCase().includes(query))
 })
 
 </script>
@@ -29,18 +57,19 @@ const filteredList = computed(() => {
       <AddTodo :list="list" />
       <input name="search_todo" placeholder="SEARCH TODO" type="search" v-model="search" />
     </div>
-    <div class="todo_container">
+    <div class="todo_container todo_body">
       <div v-if="filteredList.length > 0" v-for="(item, index) in filteredList">
-        <TodoItem v-show="!item.edit" :list="list" :item="item" :itemId="index" />
-        <EditTodo v-show="item.edit" :list="list" :item="item" :itemId="index" />
+        <TodoItem v-show="!item.edit" :list="filteredList" :item="item" :order="index + 1" />
+        <EditTodo v-show="item.edit" :list="filteredList" :item="item" />
       </div>
-      <div v-else>
+      <div class="empty_placeholder" v-else>
         <p><b>{{ `NO TO-DO :(` }}</b></p>
       </div>
     </div>
     <div class="todo_footer">
-      <button>NEW TO-DO</button>
-      <button>FINISHED TODO</button>
+      <button @click="type = 'ALL'" :disabled="type === 'ALL'">ALL</button>
+      <button @click="type = 'NEW'" :disabled="type === 'NEW'">NEW</button>
+      <button @click="type = 'DONE'" :disabled="type === 'DONE'">DONE</button>
     </div>
   </div>
 </template>
@@ -59,9 +88,20 @@ const filteredList = computed(() => {
   gap: 24px;
 }
 
+.todo_body {
+  height: 360px;
+  overflow: auto;
+}
+
+.empty_placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .todo_footer {
   display: flex;
   gap: 16px;
-  justify-content: center;
 }
 </style>
