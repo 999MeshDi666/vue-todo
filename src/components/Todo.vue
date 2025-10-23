@@ -37,7 +37,7 @@ const list = reactive([
 const type = ref("ALL")
 const currentList = computed(() => {
   if (type.value === "ALL") return list
-  if (type.value === "NEW") return list.filter((todo) => !todo.done)
+  if (type.value === "CURRENT") return list.filter((todo) => !todo.done)
   if (type.value === "DONE") return list.filter((todo) => todo.done)
   return list
 })
@@ -68,7 +68,7 @@ const filteredList = computed(() => {
     </div>
     <div class="todo_footer">
       <button @click="type = 'ALL'" :disabled="type === 'ALL'">ALL</button>
-      <button @click="type = 'NEW'" :disabled="type === 'NEW'">NEW</button>
+      <button @click="type = 'CURRENT'" :disabled="type === 'CURRENT'">CURRENT</button>
       <button @click="type = 'DONE'" :disabled="type === 'DONE'">DONE</button>
     </div>
   </div>
