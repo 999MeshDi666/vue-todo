@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const { list, item } = defineProps({
     list: Array,
@@ -8,6 +8,9 @@ const { list, item } = defineProps({
 
 const text = ref(item.text);
 
+watch(() => item.text, (newText) => {
+    text.value = newText;
+}, { immediate: true });
 
 const handleSaveItem = (id) => {
     const targetItem = list.find((i) => i.id === id)

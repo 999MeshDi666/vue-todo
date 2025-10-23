@@ -29,7 +29,7 @@ const handleEditItem = (id) => {
 
 <template>
     <div class="todo_item" @click="handleDoneItem(item.id)">
-        <p :class="{ todo_item_done: item.done }">#{{ item.id }} {{ item.text }}</p>
+        <p :class="{ todo_item_done: item.done }">#{{ order }} {{ item.text }}</p>
         <div class="todo_button_group">
             <button :hidden="item.done" @click.stop="handleEditItem(item.id)">EDIT</button>
             <button :hidden="!item.done" @click.stop="handleDeleteItem(item.id)">DELETE</button>
